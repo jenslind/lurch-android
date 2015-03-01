@@ -2,10 +2,12 @@ package io.lurch.lurch;
 
 import android.os.AsyncTask;
 import android.util.Base64;
+import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,6 +63,22 @@ public class Lurch {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    public static void runPlugin(String id) {
+        try {
+            HttpClient client = new DefaultHttpClient();
+            URI uri = new URI("http://192.168.1.3:1994/plugin/run/" + id);
+            HttpPost request = new HttpPost();
+            request.setURI(uri);
+            final String basicAuth = "Basic " + Base64.encodeToString("lurch:04ed252949e3".getBytes(), Base64.NO_WRAP);
+            request.setHeader("Authorization", basicAuth);
+            client.execute(request);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
