@@ -1,6 +1,7 @@
 package io.lurch.lurch;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.wearable.view.WearableListView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,12 +31,13 @@ public class PluginsAdapter extends WearableListView.Adapter {
 
     @Override
     public WearableListView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new WearableListView.ViewHolder(new TextView(context));
+        return new WearableListView.ViewHolder(new PluginsItemView(context));
     }
 
     @Override
     public void onBindViewHolder(WearableListView.ViewHolder holder, int position) {
-        TextView textView = (TextView) holder.itemView;
+        PluginsItemView pluginsItemView = (PluginsItemView) holder.itemView;
+        TextView textView = (TextView) pluginsItemView.findViewById(R.id.text);
         JSONObject plugin = null;
         try {
             plugin = new JSONObject(items.get(position));
