@@ -25,7 +25,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 
-public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, MessageApi.MessageListener {
+public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleApiClient googleApiClient;
     private String TAG;
@@ -159,14 +159,5 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         //Log.d("Connection suspened", ""+connectionResult.getErrorCode());
-    }
-
-    @Override
-    public void onMessageReceived(MessageEvent messageEvent) {
-        switch (messageEvent.getPath()) {
-            case "getPlugins":
-                Log.v("msglog", "Get them plugins plis!! :D");
-                break;
-        }
     }
 }
