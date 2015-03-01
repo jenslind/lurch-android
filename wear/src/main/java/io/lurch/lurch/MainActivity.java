@@ -26,6 +26,7 @@ import com.google.android.gms.wearable.Wearable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -84,13 +85,11 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
     @Override
     public void onConnected(Bundle bundle) {
         Log.v("SOMETHINK WRONk HERE?", "Connected :DDDDDDD");
+
         Wearable.MessageApi.addListener(googleApiClient, this);
 
         // Resolve node
-        //resolveNode();
-
-        // Get plugins
-        //sendMessage("/getPlugins", "");
+        resolveNode();
     }
 
     @Override
@@ -130,13 +129,18 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
     @Override
     public void onClick(WearableListView.ViewHolder viewHolder) {
         // Get clicked plugin
-        //Array plugin = (Array) pluginItems.get(viewHolder.getPosition());
+        try {
+            JSONObject plugin = new JSONObject(pluginItems.get(viewHolder.getPosition()));
+            String pluginId = plugin.getString("_id");
 
-        // Send message to phone
-        //sendMessage("/runPlugin", "pluginId");
+            // Send message to phone
+            sendMessage("/runPlugin", pluginId);
 
-        // Show a success message
-        showSuccess("Action sent");
+            // Show a success message
+            showSuccess("Action sent");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -151,6 +155,7 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
     }
 
     private void sendMessage(final String path, final String text) {
+        Log.v("Node", deviceNode.toString());
         if (deviceNode != null && googleApiClient != null && googleApiClient.isConnected()) {
             Wearable.MessageApi.sendMessage(googleApiClient, deviceNode.getId(), path, text.getBytes()).setResultCallback(
 
