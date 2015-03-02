@@ -1,5 +1,10 @@
 package io.lurch.lurch;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -32,18 +38,55 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     private Node deviceNode;
 
     private Button sendButton;
+    private Button connectButton;
     String plugins;
+
+    private EditText host;
+    private EditText token;
+
+    private static Context mainActivityContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Set context
+        mainActivityContext = getApplicationContext();
+
+        // Connect to google play services
         googleApiInit();
 
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        if (!wifi()) {
+            // Show status activity
+            Intent intent = new Intent(MainActivity.this, StatusActivity.class);
+            intent.putExtra("status", "wifi");
+            startActivity(intent);
+        }
+        else {
+            host = (EditText) findViewById(R.id.host);
+            token = (EditText) findViewById(R.id.token);
+
+            SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+            host.setText(sharedPref.getString("io.lurch.lurch.HOST", ""));
+            token.setText(sharedPref.getString("io.lurch.lurch.TOKEN", ""));
+        }
+
+        connectButton = (Button) findViewById(R.id.connect_button);
+        connectButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("io.lurch.lurch.HOST", host.getText().toString());
+                editor.putString("io.lurch.lurch.TOKEN", token.getText().toString());
+                editor.apply();
+            }
+        });
 
         sendButton = (Button) findViewById(R.id.send_button);
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -159,5 +202,20 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         //Log.d("Connection suspened", ""+connectionResult.getErrorCode());
+    }
+
+    private boolean wifi() {
+        // Check if device is connected to wifi
+        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (!mWifi.isConnected()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static Context getContextOfApplication(){
+        return mainActivityContext;
     }
 }
