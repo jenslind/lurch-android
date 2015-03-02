@@ -1,6 +1,9 @@
 package io.lurch.lurch;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
 
@@ -25,6 +28,15 @@ import java.util.ArrayList;
  */
 public class Lurch {
 
+    private static SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContextOfApplication());
+    private static String host = sharedPref.getString("io.lurch.lurch.HOST", "");
+    private static String token = sharedPref.getString("io.lurch.lurch.TOKEN", "");
+    private static int port = 1994;
+    private static String username = "lurch";
+
+    private static String lurchUrl = "http://" + host + ":" + port;
+    private static String lurchAuth = username + ":" + token;
+
     public static String getPlugins() throws IOException, URISyntaxException, JSONException {
 
         BufferedReader in = null;
@@ -32,10 +44,10 @@ public class Lurch {
 
         try {
             HttpClient client = new DefaultHttpClient();
-            URI uri = new URI("http://192.168.1.3:1994/plugins/get/");
+            URI uri = new URI(lurchUrl + "/plugins/get/");
             HttpGet request = new HttpGet();
             request.setURI(uri);
-            final String basicAuth = "Basic " + Base64.encodeToString("lurch:04ed252949e3".getBytes(), Base64.NO_WRAP);
+            final String basicAuth = "Basic " + Base64.encodeToString(lurchAuth.getBytes(), Base64.NO_WRAP);
             request.setHeader("Authorization", basicAuth);
             HttpResponse response = client.execute(request);
 
@@ -69,7 +81,7 @@ public class Lurch {
     public static void runPlugin(String id) {
         try {
             HttpClient client = new DefaultHttpClient();
-            URI uri = new URI("http://192.168.1.3:1994/plugin/run/" + id);
+            URI uri = new URI(lurchUrl + "/plugin/run/" + id);
             HttpPost request = new HttpPost();
             request.setURI(uri);
             final String basicAuth = "Basic " + Base64.encodeToString("lurch:04ed252949e3".getBytes(), Base64.NO_WRAP);
