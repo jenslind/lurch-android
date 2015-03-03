@@ -33,9 +33,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private GoogleApiClient googleApiClient;
-    private String TAG;
-    private Node deviceNode;
+    private static GoogleApiClient googleApiClient;
+    private static Node deviceNode;
 
     private Button sendButton;
     private Button connectButton;
@@ -158,7 +157,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         return super.onOptionsItemSelected(item);
     }
 
-    private void sendMessage(final String path, final String text) {
+    public static void sendMessage(final String path, final String text) {
         if (deviceNode != null && googleApiClient != null && googleApiClient.isConnected()) {
             Wearable.MessageApi.sendMessage(googleApiClient, deviceNode.getId(), path, text.getBytes()).setResultCallback(
 
