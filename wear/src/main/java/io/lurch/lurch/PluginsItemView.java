@@ -21,11 +21,11 @@ public class PluginsItemView extends FrameLayout implements WearableListView.OnC
 
     @Override
     public void onCenterPosition(boolean b) {
-
+        text.animate().setDuration(10).scaleX(1f).scaleY(1f).alpha(1);
     }
 
     @Override
     public void onNonCenterPosition(boolean b) {
-
+        text.animate().setDuration(10).scaleX(0.8f).scaleY(0.8f).alpha(0.4f);
     }
 }

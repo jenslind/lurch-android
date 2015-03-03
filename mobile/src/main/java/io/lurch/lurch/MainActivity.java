@@ -44,15 +44,13 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     private EditText host;
     private EditText token;
 
-    private static Context mainActivityContext;
+    public static String LURCH_HOST = "";
+    public static String LURCH_TOKEN = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Set context
-        mainActivityContext = getApplicationContext();
 
         // Connect to google play services
         googleApiInit();
@@ -70,9 +68,12 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             host = (EditText) findViewById(R.id.host);
             token = (EditText) findViewById(R.id.token);
 
-            SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
-            host.setText(sharedPref.getString("io.lurch.lurch.HOST", ""));
-            token.setText(sharedPref.getString("io.lurch.lurch.TOKEN", ""));
+            SharedPreferences sharedPref = MainActivity.this.getSharedPreferences("io.lurch.lurch", Context.MODE_PRIVATE);
+            host.setText(sharedPref.getString("io.lurch.lurch.host", ""));
+            token.setText(sharedPref.getString("io.lurch.lurch.token", ""));
+
+            LURCH_HOST = sharedPref.getString("io.lurch.lurch.host", "");
+            LURCH_TOKEN = sharedPref.getString("io.lurch.lurch.token", "");
         }
 
         connectButton = (Button) findViewById(R.id.connect_button);
@@ -80,10 +81,10 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
             @Override
             public void onClick(View v) {
-                SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences sharedPref = MainActivity.this.getSharedPreferences("io.lurch.lurch", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString("io.lurch.lurch.HOST", host.getText().toString());
-                editor.putString("io.lurch.lurch.TOKEN", token.getText().toString());
+                editor.putString("io.lurch.lurch.host", host.getText().toString());
+                editor.putString("io.lurch.lurch.token", token.getText().toString());
                 editor.apply();
             }
         });
@@ -213,9 +214,5 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         }
 
         return true;
-    }
-
-    public static Context getContextOfApplication(){
-        return mainActivityContext;
     }
 }

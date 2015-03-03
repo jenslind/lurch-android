@@ -28,14 +28,11 @@ import java.util.ArrayList;
  */
 public class Lurch {
 
-    private static SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContextOfApplication());
-    private static String host = sharedPref.getString("io.lurch.lurch.HOST", "");
-    private static String token = sharedPref.getString("io.lurch.lurch.TOKEN", "");
     private static int port = 1994;
     private static String username = "lurch";
 
-    private static String lurchUrl = "http://" + host + ":" + port;
-    private static String lurchAuth = username + ":" + token;
+    private static String lurchUrl = "http://" + MainActivity.LURCH_HOST + ":" + port;
+    private static String lurchAuth = username + ":" + MainActivity.LURCH_TOKEN;
 
     public static String getPlugins() throws IOException, URISyntaxException, JSONException {
 
