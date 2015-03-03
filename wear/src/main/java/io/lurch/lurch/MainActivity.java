@@ -59,6 +59,7 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        // Connect to google play services
         googleApiInit();
     }
 
@@ -84,12 +85,16 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.v("SOMETHINK WRONk HERE?", "Connected :DDDDDDD");
-
         Wearable.MessageApi.addListener(googleApiClient, this);
 
         // Resolve node
-        resolveNode();
+        resolveNode(new Callback() {
+
+            @Override
+            public void fire() {
+                sendMessage("/getPlugins", "");
+            }
+        });
     }
 
     @Override
@@ -104,8 +109,6 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        Log.d("MSG RECEIVED", "A new msg was received");
-
         pluginItems.clear();
         JSONArray jsonArray = null;
         try {
@@ -120,7 +123,6 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Log.d("Adapter", "ADapter change ?!?!?!");
                 pluginsAdapter.notifyDataSetChanged();
             }
         });
@@ -176,14 +178,21 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
         }
     }
 
-    private void resolveNode() {
+    private void resolveNode(final Callback callback) {
         Wearable.NodeApi.getConnectedNodes(googleApiClient).setResultCallback(new ResultCallback<NodeApi.GetConnectedNodesResult>() {
             @Override
             public void onResult(NodeApi.GetConnectedNodesResult nodes) {
             for (Node node : nodes.getNodes()) {
                 deviceNode = node;
             }
+
+            callback.fire();
             }
         });
+    }
+
+    // Super simple callback inferface
+    interface Callback {
+        void fire();
     }
 }
