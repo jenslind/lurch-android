@@ -81,7 +81,7 @@ public class Lurch {
             URI uri = new URI(lurchUrl + "/plugin/run/" + id);
             HttpPost request = new HttpPost();
             request.setURI(uri);
-            final String basicAuth = "Basic " + Base64.encodeToString("lurch:04ed252949e3".getBytes(), Base64.NO_WRAP);
+            final String basicAuth = "Basic " + Base64.encodeToString(lurchAuth.getBytes(), Base64.NO_WRAP);
             request.setHeader("Authorization", basicAuth);
             client.execute(request);
         } catch (URISyntaxException e) {
