@@ -8,17 +8,6 @@
     tools:deviceIds="wear_round"
     android:background="#eeeeee">
 
-    <TextView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:gravity="center_horizontal"
-        android:id="@+id/pluginsHeaderText"
-        android:text="Plugins"
-        android:layout_marginTop="20dp"
-        android:textColor="#888888" />
-
-
     <android.support.wearable.view.WearableListView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

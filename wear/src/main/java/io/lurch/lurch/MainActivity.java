@@ -39,7 +39,6 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
     private WearableListView pluginsList;
     private Node deviceNode;
     private PluginsAdapter pluginsAdapter = new PluginsAdapter(MainActivity.this, pluginItems);
-    private TextView headerText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,38 +53,6 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
                 pluginsList = (WearableListView) findViewById(R.id.pluginsListView);
                 pluginsList.setAdapter(pluginsAdapter);
                 pluginsList.setClickListener(MainActivity.this);
-
-                headerText = (TextView) findViewById(R.id.pluginsHeaderText);
-
-                pluginsList.addOnScrollListener(new WearableListView.OnScrollListener() {
-
-                    @Override
-                    public void onScroll(int i) {
-
-                    }
-
-                    @Override
-                    public void onAbsoluteScrollChange(int i) {
-                        int show = View.VISIBLE;
-                        if (i <= 0){
-                            show = View.VISIBLE;
-                        } else {
-                            show = View.INVISIBLE;
-                        }
-
-                        headerText.setVisibility(show);
-                    }
-
-                    @Override
-                    public void onScrollStateChanged(int i) {
-
-                    }
-
-                    @Override
-                    public void onCentralPositionChanged(int i) {
-
-                    }
-                });
 
             }
         });
