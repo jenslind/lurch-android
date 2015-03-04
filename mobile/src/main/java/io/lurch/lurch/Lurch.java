@@ -31,10 +31,10 @@ public class Lurch {
     private static int port = 1994;
     private static String username = "lurch";
 
-    private static String lurchUrl = "http://" + MainActivity.LURCH_HOST + ":" + port;
-    private static String lurchAuth = username + ":" + MainActivity.LURCH_TOKEN;
-
     public static String getPlugins() throws IOException, URISyntaxException, JSONException {
+
+        String lurchUrl = "http://" + MainActivity.LURCH_HOST + ":" + port;
+        String lurchAuth = username + ":" + MainActivity.LURCH_TOKEN;
 
         BufferedReader in = null;
         String data = null;
@@ -76,6 +76,9 @@ public class Lurch {
     }
 
     public static void runPlugin(String id) {
+        String lurchUrl = "http://" + MainActivity.LURCH_HOST + ":" + port;
+        String lurchAuth = username + ":" + MainActivity.LURCH_TOKEN;
+
         try {
             HttpClient client = new DefaultHttpClient();
             URI uri = new URI(lurchUrl + "/plugin/run/" + id);
