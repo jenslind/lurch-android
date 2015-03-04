@@ -85,31 +85,9 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 editor.putString("io.lurch.lurch.host", host.getText().toString());
                 editor.putString("io.lurch.lurch.token", token.getText().toString());
                 editor.apply();
-            }
-        });
 
-        sendButton = (Button) findViewById(R.id.send_button);
-        sendButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            plugins = Lurch.getPlugins();
-                            Log.v("REST", plugins);
-                            sendMessage("/plugins", plugins);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (URISyntaxException e) {
-                            e.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                thread.start();
+                LURCH_HOST = host.getText().toString();
+                LURCH_TOKEN = token.getText().toString();
             }
         });
     }
