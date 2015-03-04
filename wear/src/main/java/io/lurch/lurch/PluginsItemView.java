@@ -1,6 +1,7 @@
 package io.lurch.lurch;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.wearable.view.WearableListView;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -21,11 +22,11 @@ public class PluginsItemView extends FrameLayout implements WearableListView.OnC
 
     @Override
     public void onCenterPosition(boolean b) {
-        text.animate().setDuration(100).alpha(1);
+        text.setTextColor(Color.parseColor("#000000"));
     }
 
     @Override
     public void onNonCenterPosition(boolean b) {
-        text.animate().setDuration(100).alpha(0.4f);
+        text.setTextColor(Color.parseColor("#888888"));
     }
 }
