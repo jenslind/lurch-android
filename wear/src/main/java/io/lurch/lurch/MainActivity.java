@@ -117,6 +117,9 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
             for (int i = 0; i < jsonArray.length(); i++) {
                 pluginItems.add(jsonArray.getString(i));
             }
+
+            // Add empty string (header)
+            pluginItems.add(0, "");
         } catch (JSONException e) {
             e.printStackTrace();
         }
