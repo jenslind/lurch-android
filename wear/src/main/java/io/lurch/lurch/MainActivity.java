@@ -38,18 +38,18 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
 
     private GoogleApiClient googleApiClient;
     private Node deviceNode;
+    private GridViewPager mainPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final GridViewPager mainPager = (GridViewPager) findViewById(R.id.mainPager);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
-                //mainPager.setAdapter(new SampleGridPagerAdapter(this, getFragmentManager()));
+                mainPager = (GridViewPager) findViewById(R.id.mainPager);
+                mainPager.setAdapter(new PagerAdapter(MainActivity.this));
                 DotsPageIndicator dotsPageIndicator = (DotsPageIndicator) findViewById(R.id.mainPagerIndicator);
                 dotsPageIndicator.setPager(mainPager);
             }
@@ -91,7 +91,7 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
 
             @Override
             public void fire() {
-                sendMessage("/getPlugins", "");
+                //sendMessage("/getPlugins", "");
             }
         });
     }
