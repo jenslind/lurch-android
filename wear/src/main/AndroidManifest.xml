@@ -18,8 +18,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="android.support.wearable.activity.ConfirmationActivity" >
+        </activity>
         <activity
-            android:name="android.support.wearable.activity.ConfirmationActivity">
+            android:name=".PluginsActivity"
+            android:label="@string/title_activity_plugins" >
         </activity>
     </application>
 
