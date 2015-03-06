@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.activity.ConfirmationActivity;
+import android.support.wearable.view.DotsPageIndicator;
+import android.support.wearable.view.GridViewPager;
 import android.support.wearable.view.WatchViewStub;
 import android.support.wearable.view.WearableListView;
 import android.util.Log;
@@ -32,28 +34,24 @@ import org.json.JSONObject;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class MainActivity extends Activity implements MessageApi.MessageListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, WearableListView.ClickListener {
+public class MainActivity extends Activity implements MessageApi.MessageListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleApiClient googleApiClient;
-    private ArrayList<String> pluginItems = new ArrayList<String>();
-    private WearableListView pluginsList;
     private Node deviceNode;
-    private PluginsAdapter pluginsAdapter = new PluginsAdapter(MainActivity.this, pluginItems);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final GridViewPager mainPager = (GridViewPager) findViewById(R.id.mainPager);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
-
-                // Set the list adapter here
-                pluginsList = (WearableListView) findViewById(R.id.pluginsListView);
-                pluginsList.setAdapter(pluginsAdapter);
-                pluginsList.setClickListener(MainActivity.this);
-
+                //mainPager.setAdapter(new SampleGridPagerAdapter(this, getFragmentManager()));
+                DotsPageIndicator dotsPageIndicator = (DotsPageIndicator) findViewById(R.id.mainPagerIndicator);
+                dotsPageIndicator.setPager(mainPager);
             }
         });
 
@@ -110,7 +108,7 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        pluginItems.clear();
+        /*pluginItems.clear();
         JSONArray jsonArray = null;
         try {
             jsonArray = new JSONArray(new String(messageEvent.getData()));
@@ -129,35 +127,7 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
             public void run() {
                 pluginsAdapter.notifyDataSetChanged();
             }
-        });
-    }
-
-    @Override
-    public void onClick(WearableListView.ViewHolder viewHolder) {
-        // Get clicked plugin
-        try {
-            JSONObject plugin = new JSONObject(pluginItems.get(viewHolder.getPosition()));
-            String pluginId = plugin.getString("_id");
-
-            // Send message to phone
-            sendMessage("/runPlugin", pluginId);
-
-            // Show a success message
-            showSuccess("Action sent");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onTopEmptyRegionClick() {
-
-    }
-
-    private void showSuccess(String msg) {
-        Intent intent = new Intent(this, ConfirmationActivity.class);
-        intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE, ConfirmationActivity.SUCCESS_ANIMATION);
-        startActivity(intent);
+        });*/
     }
 
     private void sendMessage(final String path, final String text) {
