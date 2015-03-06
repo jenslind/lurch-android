@@ -57,8 +57,11 @@ public class PluginsAdapter extends WearableListView.Adapter {
         if (position == 0) {
             TextView textView = (TextView) holder.itemView;
             textView.setText("Plugins");
-            textView.setTextColor(Color.parseColor("#888888"));
+            textView.setTextColor(Color.parseColor("#3A474E"));
+            textView.setBackgroundColor(Color.parseColor("#FFFFFF"));
             textView.setTextSize(20);
+            textView.setHeight(30);
+            textView.setPadding(0, 30, 0, 0);
             textView.setGravity(Gravity.CENTER_HORIZONTAL);
         } else {
             PluginsItemView pluginsItemView = (PluginsItemView) holder.itemView;
