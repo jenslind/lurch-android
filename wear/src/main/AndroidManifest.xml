@@ -20,10 +20,6 @@
         </activity>
         <activity android:name="android.support.wearable.activity.ConfirmationActivity" >
         </activity>
-        <activity
-            android:name=".PluginsActivity"
-            android:label="@string/title_activity_plugins" >
-        </activity>
     </application>
 
 </manifest>
