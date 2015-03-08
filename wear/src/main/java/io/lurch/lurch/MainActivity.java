@@ -34,11 +34,14 @@ import org.json.JSONObject;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class MainActivity extends Activity implements MessageApi.MessageListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends Activity implements MessageApi.MessageListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, WearableListView.ClickListener {
 
     private GoogleApiClient googleApiClient;
     private Node deviceNode;
     private GridViewPager mainPager;
+    private static ArrayList<String> pluginItems = new ArrayList<String>();
+    public static WearableListView pluginsView;
+    private PluginsAdapter pluginsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,13 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
+
+                pluginsView = new WearableListView(MainActivity.this);
+                pluginsAdapter = new PluginsAdapter(MainActivity.this, pluginItems);
+                pluginsView.setAdapter(pluginsAdapter);
+                pluginsView.setGreedyTouchMode(true);
+                pluginsView.setClickListener(MainActivity.this);
+
                 mainPager = (GridViewPager) findViewById(R.id.mainPager);
                 mainPager.setAdapter(new PagerAdapter(MainActivity.this));
                 DotsPageIndicator dotsPageIndicator = (DotsPageIndicator) findViewById(R.id.mainPagerIndicator);
@@ -91,7 +101,7 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
 
             @Override
             public void fire() {
-                //sendMessage("/getPlugins", "");
+                sendMessage("/getPlugins", "");
             }
         });
     }
@@ -108,7 +118,7 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        /*pluginItems.clear();
+        pluginItems.clear();
         JSONArray jsonArray = null;
         try {
             jsonArray = new JSONArray(new String(messageEvent.getData()));
@@ -127,7 +137,7 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
             public void run() {
                 pluginsAdapter.notifyDataSetChanged();
             }
-        });*/
+        });
     }
 
     private void sendMessage(final String path, final String text) {
@@ -168,5 +178,33 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
     // Super simple callback inferface
     interface Callback {
         void fire();
+    }
+
+    private void showSuccess(String msg) {
+        Intent intent = new Intent(this, ConfirmationActivity.class);
+        intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE, ConfirmationActivity.SUCCESS_ANIMATION);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onClick(WearableListView.ViewHolder viewHolder) {
+        // Get clicked plugin
+        try {
+            JSONObject plugin = new JSONObject(pluginItems.get(viewHolder.getPosition()));
+            String pluginId = plugin.getString("_id");
+
+            // Send message to phone
+            MainActivity.sendMessage("/runPlugin", pluginId);
+
+            // Show a success message
+            showSuccess("Action sent");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onTopEmptyRegionClick() {
+
     }
 }
