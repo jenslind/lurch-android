@@ -194,7 +194,7 @@ public class MainActivity extends Activity implements MessageApi.MessageListener
             String pluginId = plugin.getString("_id");
 
             // Send message to phone
-            MainActivity.sendMessage("/runPlugin", pluginId);
+            sendMessage("/runPlugin", pluginId);
 
             // Show a success message
             showSuccess("Action sent");
