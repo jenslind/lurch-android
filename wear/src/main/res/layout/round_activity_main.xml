@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:keepScreenOn="true"
-        app:layout_box="all">
+        app:layout_box="top|bottom">
     </android.support.wearable.view.GridViewPager>
 
     <android.support.wearable.view.DotsPageIndicator
