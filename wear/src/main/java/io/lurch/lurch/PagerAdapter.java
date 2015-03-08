@@ -1,11 +1,13 @@
 package io.lurch.lurch;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.support.wearable.view.GridPagerAdapter;
+import android.support.wearable.view.WearableListView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -17,18 +19,16 @@ import android.widget.TextView;
 import com.larvalabs.svgandroid.SVG;
 import com.larvalabs.svgandroid.SVGParser;
 
+import java.util.ArrayList;
+
 /**
  * Created by jens on 15-03-06.
  */
 public class PagerAdapter extends GridPagerAdapter {
 
-    private String[][] pages = new String[1][2];
     private Context context;
 
     public PagerAdapter(Context context) {
-        pages[0][0] = "test";
-        pages[0][1] = "test2";
-
         this.context = context;
     }
 
@@ -49,32 +49,16 @@ public class PagerAdapter extends GridPagerAdapter {
 
     @Override
     protected Object instantiateItem(ViewGroup viewGroup, int i, int i2) {
-        /*TextView textView = new TextView(context);
-        textView.setText(pages[i][i2]);
-        textView.setTextColor(Color.parseColor("#FFFFFF"));
-        textView.setGravity(Gravity.CENTER);
-        viewGroup.addView(textView);*/
-
-        ImageView imageView = new ImageView(context);
-        SVG svg = SVGParser.getSVGFromResource(context.getResources(), R.raw.android);
-        imageView.setImageDrawable(svg.createPictureDrawable());
-
-        /*LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(50, 50);
-        layoutParams.gravity=Gravity.CENTER;
-        imageView.setLayoutParams(layoutParams);*/
-
-        viewGroup.addView(imageView);
-
-        return imageView;
-
-        /*textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v(":DDD", "CLICKED THE MF TEXT!!");
-            }
-        });*/
-
-        //return textView;
+        if (i2 == 1) {
+            viewGroup.addView(MainActivity.pluginsView);
+            return MainActivity.pluginsView;
+        } else {
+            TextView textView = new TextView(context);
+            textView.setText("Empty page");
+            viewGroup.addView(textView);
+            textView.setGravity(Gravity.CENTER);
+            return textView;
+        }
     }
 
     @Override
