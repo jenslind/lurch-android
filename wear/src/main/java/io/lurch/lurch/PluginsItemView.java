@@ -20,10 +20,6 @@ public class PluginsItemView extends FrameLayout implements WearableListView.OnC
         super(context);
         View.inflate(context, R.layout.plugin_item, this);
         text = (TextView) findViewById(R.id.text);
-
-        //this.setBackgroundColor(Color.parseColor("#222222"));
-        //LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 10);
-        //this.setLayoutParams(lp);
     }
 
     @Override
@@ -33,6 +29,6 @@ public class PluginsItemView extends FrameLayout implements WearableListView.OnC
 
     @Override
     public void onNonCenterPosition(boolean b) {
-        text.setTextColor(Color.parseColor("#888888"));
+        text.setTextColor(Color.parseColor("#AAAAAA"));
     }
 }
